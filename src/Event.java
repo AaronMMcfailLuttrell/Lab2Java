@@ -25,8 +25,8 @@ public abstract class Event implements Comparable<Event> {
 
     public String getDisplayString() {
         String display = "";
-        display += getName();
-        display += ", " + getDateTime();
+        display += "Name: " + getName();
+        display += ", Start Time: " + getDateTime();
         return display;
     }
 

@@ -42,13 +42,15 @@ public class Meeting extends Event implements Completable {
 
     public String getDisplayString() {
         String display = super.getDisplayString();
+
+
         if (getDuration() != null) {
-            display += ", " + getDuration().toString();
+            display += ", Duration: " + getDuration().toString();
         }
         if (getLocation() != null) {
-            display += ", " + getLocation();
+            display += ", Location: " + getLocation();
         }
-        display += ", " + complete;
+
         return display;
     }
 

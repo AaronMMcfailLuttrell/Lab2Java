@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.lang.constant.PackageDesc;
+import java.sql.SQLOutput;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class AddEventModal extends JDialog {
@@ -29,9 +31,9 @@ public class AddEventModal extends JDialog {
     Sets the text fields for both meeting and deadline, but sets initially to false
     */
     //Meeting array, first four indeces hold the labels for the input boxes, last 4 indeces are where the user inputs the information
-        //[0] = meetingNameLabel, [1] = meetingDateTimeLabel, [2] = meetingDuration, [3] = meetingLocation, the next 4 indeces are the actual text boxes
+        //[0] = meetingNameLabel, [1] = meetingLocation, [2] = meetingDateTimeLabel, [3] = meetingDuration, [3] = meetingLocation, the next 4 indeces are the actual text boxes
     JTextField[] meetingFieldArray = new JTextField[MEETING_ARRAY_SIZE];
-    String[] labelStrings = {"Name:", "Date time:", "Duration: ", "Location: "};
+    String[] labelStrings = {"Name:", "Location: ", "Date time:", "End Time: "};
 
     //Deadline Radial
         //[0] = deadlineName, [1] = deadlineDateTime, other 2 are the insert boxes
@@ -43,7 +45,7 @@ public class AddEventModal extends JDialog {
     JButton submitButton = new JButton("Submit");
 
     //Design
-    AddEventModal() {
+    AddEventModal(EventListPanel eventListPanel) {
         this.setTitle("Add Event");
         this.setModal(true);
         this.setResizable(false);
@@ -73,6 +75,10 @@ public class AddEventModal extends JDialog {
             this.add(meetingFieldArray[i]);
         }
 
+        //set format text for meetingDateTime
+        meetingFieldArray[6].setText("yyyy-mm-dd-hh-mm-ss");
+        meetingFieldArray[7].setText("yyyy-mm-dd-hh-mm-ss");
+
         //Set design for Deadline
         for (int i = 0; i < DEAD_ARRAY_SIZE/2; i++) {
             deadFieldArray[i] = new JTextField();
@@ -83,6 +89,7 @@ public class AddEventModal extends JDialog {
             deadFieldArray[i].setVisible(false);
             this.add(deadFieldArray[i]);
         }
+
 
         for (int i = DEAD_ARRAY_SIZE / 2; i < DEAD_ARRAY_SIZE; i++) {
             deadFieldArray[i] = new JTextField();
@@ -164,10 +171,48 @@ public class AddEventModal extends JDialog {
 
             if (whichRadialActive == 1) {
                 //If meeting is being created
-                Meeting tempMeeting = new Meeting(meetingFieldArray[4].getText(), meetingFieldArray[5].getText(), meetingFieldArray[6].getText(), meetingFieldArray[7].getText());
+
+                //Start local time
+                String boxTextDate = meetingFieldArray[6].getText();
+                String[] dateBoxInfo = boxTextDate.split("-");
+                int[] dateValues = new int[6];
+                int count = 0;
+                //Sets each string to an int to create a localdatetime
+                for (String placeholder : dateBoxInfo) {
+                    dateValues[count] = Integer.parseInt(placeholder);
+                    count++;
+                }
+                //Create LocalDateTime for event
+                LocalDateTime tempLocalDateTime = LocalDateTime.of(dateValues[0], dateValues[1], dateValues[2], dateValues[3], dateValues[4], dateValues[5]);
+                //Create end local time
+                String boxTextEndDate = meetingFieldArray[7].getText();
+                String[] endDateBoxInfo = boxTextEndDate.split("-");
+                int[] endDateValues = new int[6];
+                count = 0;
+                for (String placeholder : endDateBoxInfo) {
+                    endDateValues[count] = Integer.parseInt(placeholder);
+                    count++;
+                }
+                LocalDateTime endLocalDate = LocalDateTime.of(endDateValues[0], endDateValues[1],endDateValues[2],endDateValues[3],endDateValues[4],endDateValues[5]);
+
+                Meeting tempMeeting = new Meeting(meetingFieldArray[4].getText(), tempLocalDateTime, endLocalDate, meetingFieldArray[5].getText());
+
+                eventListPanel.events.add(tempMeeting);
+                this.dispose();
+                eventListPanel.displayPanel.removeAll();
+                for (Event event : eventListPanel.events) {
+                    eventListPanel.displayPanel.add(new EventPanel(event, eventListPanel.DISPLAY_PANEL_X, eventListPanel.DISPLAY_PANEL_Y));
+                    eventListPanel.displayPanel.add(Box.createVerticalStrut(5));
+                }
+
+                eventListPanel.displayPanel.revalidate();
+                eventListPanel.displayPanel.repaint();
+                eventListPanel.itemHolder.revalidate();
+                eventListPanel.itemHolder.repaint();
+                //Meeting tempMeeting = new Meeting(meetingFieldArray[4].getText(), meetingFieldArray[5].getText(), meetingFieldArray[6].getText(), meetingFieldArray[7].getText());
             } else if (whichRadialActive == 2) {
                 //If deadline is being created
-                LocalDateTime test = new LocalDateTime(//LocalDate, //LocalTime)
+                //LocalDateTime test = new LocalDateTime.of() //int year int month int day int hour int minute int second
             }
 
         });
