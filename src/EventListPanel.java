@@ -15,9 +15,9 @@ public class EventListPanel extends JPanel {
         this.events = events;
     }
     JPanel controlPanel = new JPanel();
-    JPanel displayPanel = new JPanel();
+    private JPanel displayPanel = new JPanel();
 
-    JScrollPane itemHolder = new JScrollPane(displayPanel);
+    private JScrollPane itemHolder = new JScrollPane(displayPanel);
     JComboBox sortDropDown = new JComboBox();
     JCheckBox filterDisplay = new JCheckBox();
     JButton addEventButton = new JButton();
@@ -79,5 +79,18 @@ public class EventListPanel extends JPanel {
         itemHolder.setPreferredSize(new Dimension(DISPLAY_PANEL_X, DISPLAY_PANEL_Y));
         displayPanel.setPreferredSize(new Dimension(DISPLAY_PANEL_X,DISPLAY_PANEL_Y));
 
+    }
+
+    public void redrawDisplay() {
+        displayPanel.removeAll();
+        for (Event event : events) {
+            displayPanel.add(new EventPanel(event, DISPLAY_PANEL_X, DISPLAY_PANEL_Y));
+            displayPanel.add(Box.createVerticalStrut(5));
+        }
+        displayPanel.setPreferredSize(new Dimension(DISPLAY_PANEL_X, displayPanel.getComponentCount() * 200));
+        displayPanel.revalidate();
+        displayPanel.repaint();
+        itemHolder.revalidate();
+        itemHolder.repaint();
     }
 }

@@ -199,16 +199,7 @@ public class AddEventModal extends JDialog {
 
                 eventListPanel.events.add(tempMeeting);
                 this.dispose();
-                eventListPanel.displayPanel.removeAll();
-                for (Event event : eventListPanel.events) {
-                    eventListPanel.displayPanel.add(new EventPanel(event, eventListPanel.DISPLAY_PANEL_X, eventListPanel.DISPLAY_PANEL_Y));
-                    eventListPanel.displayPanel.add(Box.createVerticalStrut(5));
-                }
-
-                eventListPanel.displayPanel.revalidate();
-                eventListPanel.displayPanel.repaint();
-                eventListPanel.itemHolder.revalidate();
-                eventListPanel.itemHolder.repaint();
+                eventListPanel.redrawDisplay();
                 //Meeting tempMeeting = new Meeting(meetingFieldArray[4].getText(), meetingFieldArray[5].getText(), meetingFieldArray[6].getText(), meetingFieldArray[7].getText());
             } else if (whichRadialActive == 2) {
                 //If deadline is being created
