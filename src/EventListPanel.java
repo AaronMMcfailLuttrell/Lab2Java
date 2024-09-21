@@ -38,13 +38,18 @@ public class EventListPanel extends JPanel {
         this.add(controlPanel);
         //DisplayPanel Config
         displayPanel.setSize(DISPLAY_PANEL_X,DISPLAY_PANEL_Y);
-        displayPanel.setPreferredSize(new Dimension(DISPLAY_PANEL_X,DISPLAY_PANEL_Y));
         displayPanel.setBackground(Color.white);
         displayPanel.setLocation(100,0);
         displayPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         displayPanel.setVisible(true);
+        displayPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+
         itemHolder.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         itemHolder.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        itemHolder.setSize(DISPLAY_PANEL_X,DISPLAY_PANEL_Y);
+        itemHolder.setBackground(Color.white);
+        itemHolder.setBorder(BorderFactory.createLineBorder(Color.black));
+
         //dropdown
         sortDropDown.setBackground(Color.white);
         sortDropDown.setLayout(null);
@@ -70,7 +75,9 @@ public class EventListPanel extends JPanel {
         addEventButton.setSize(200,20);
         controlPanel.add(addEventButton);
 
-        this.add(displayPanel);
+        this.add(itemHolder);
+        itemHolder.setPreferredSize(new Dimension(DISPLAY_PANEL_X, DISPLAY_PANEL_Y));
+        displayPanel.setPreferredSize(new Dimension(DISPLAY_PANEL_X,DISPLAY_PANEL_Y));
 
     }
 }

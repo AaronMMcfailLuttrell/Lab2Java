@@ -15,6 +15,7 @@ public class EventPanel extends JPanel {
         textArea.setEditable(false);
         textArea.setText(event.getDisplayString());
         textArea.setSize(panelWidth-60, 180);
+        textArea.setPreferredSize(new Dimension(panelWidth-60, 180));
         textArea.setFont(new Font("Arial", Font.PLAIN, 16));
         textArea.setLocation(10,10);
         textArea.setVisible(true);
