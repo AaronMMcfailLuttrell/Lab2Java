@@ -100,7 +100,7 @@ public class AddEventModal extends JDialog {
             deadFieldArray[i].setVisible(false);
             this.add(deadFieldArray[i]);
         }
-
+        deadFieldArray[3].setText("yyyy-mm-dd-hh-mm-ss");
 
         //Set radio buttons to display specific options
         meetLabel.setEditable(false);
@@ -203,7 +203,20 @@ public class AddEventModal extends JDialog {
                 //Meeting tempMeeting = new Meeting(meetingFieldArray[4].getText(), meetingFieldArray[5].getText(), meetingFieldArray[6].getText(), meetingFieldArray[7].getText());
             } else if (whichRadialActive == 2) {
                 //If deadline is being created
-                //LocalDateTime test = new LocalDateTime.of() //int year int month int day int hour int minute int second
+                String deadlineBoxDate = deadFieldArray[3].getText();
+                String[] deadlineBoxInfo = deadlineBoxDate.split("-");
+                int[] deadlineDateValues = new int[6];
+                int count = 0;
+                for (String placeholder : deadlineBoxInfo) {
+                    deadlineDateValues[count] = Integer.parseInt(placeholder);
+                    count++;
+                }
+                LocalDateTime deadlineDateTimePlaceholder = LocalDateTime.of(deadlineDateValues[0],deadlineDateValues[1],deadlineDateValues[2],deadlineDateValues[3],deadlineDateValues[4],deadlineDateValues[5]);
+                Deadline tempDeadline = new Deadline(deadFieldArray[2].getText(), deadlineDateTimePlaceholder);
+                eventListPanel.events.add(tempDeadline);
+                this.dispose();
+                eventListPanel.sortDropDown.setSelectedIndex(0);
+                eventListPanel.redrawDisplay();
             }
 
         });
