@@ -44,6 +44,7 @@ public class EventPanel extends JPanel {
     }
 
     void updateUrgency() {
+        //Set the timer that will update every second
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
         Runnable task = () -> {
