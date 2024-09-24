@@ -7,12 +7,15 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class AddEventModal extends JDialog {
-
+    //whichRadialActive is for the program to know which one the user currently selects.
     int whichRadialActive = 0;
+
+    //Declare basic requirements listed in word document
     JRadioButton meet = new JRadioButton("Meeting");
     JRadioButton dead = new JRadioButton("Deadline");
     JTextField meetLabel = new JTextField();
     JTextField deadLabel = new JTextField();
+
     /*
     Sets the text fields for both meeting and deadline, but sets initially to false
     */
@@ -39,7 +42,7 @@ public class AddEventModal extends JDialog {
         this.setLocationRelativeTo(null);
         this.setLayout(null);
 
-        //Set design for meeting
+        //Set design for meeting text descriptions
         for (int i = 0; i < Constants.MEETING_ARRAY_SIZE / 2; i++) {
             //label array
             meetingFieldArray[i] = new JTextField();
@@ -51,6 +54,7 @@ public class AddEventModal extends JDialog {
             this.add(meetingFieldArray[i]);
         }
 
+        //declare the design for the user input panels
         for (int i = Constants.MEETING_ARRAY_SIZE / 2; i < Constants.MEETING_ARRAY_SIZE; i++) {
             meetingFieldArray[i] = new JTextField();
             meetingFieldArray[i].setEditable(true);
@@ -65,7 +69,7 @@ public class AddEventModal extends JDialog {
         meetingFieldArray[6].setText("yyyy-mm-dd-hh-mm-ss");
         meetingFieldArray[7].setText("yyyy-mm-dd-hh-mm-ss");
 
-        //Set design for Deadline
+        //Set design for Deadline title descriptors
         for (int i = 0; i < Constants.DEAD_ARRAY_SIZE/2; i++) {
             deadFieldArray[i] = new JTextField();
             deadFieldArray[i].setEditable(false);
@@ -76,7 +80,7 @@ public class AddEventModal extends JDialog {
             this.add(deadFieldArray[i]);
         }
 
-
+        //Sets the design for the user input text box
         for (int i = Constants.DEAD_ARRAY_SIZE / 2; i < Constants.DEAD_ARRAY_SIZE; i++) {
             deadFieldArray[i] = new JTextField();
             deadFieldArray[i].setEditable(true);
@@ -86,6 +90,7 @@ public class AddEventModal extends JDialog {
             deadFieldArray[i].setVisible(false);
             this.add(deadFieldArray[i]);
         }
+        //Set format for date input
         deadFieldArray[3].setText("yyyy-mm-dd-hh-mm-ss");
 
         //Set radio buttons to display specific options
@@ -98,6 +103,7 @@ public class AddEventModal extends JDialog {
         meet.setLocation(Constants.MEET_RADIAL_X,0);
         meet.setSize(Constants.RADIAL_DIMENSION,Constants.RADIAL_DIMENSION);
         meet.setVisible(true);
+        //If the user selects meet and deadline is selected, make deadline not selected and its panel invisible, make meet visible.
         meet.addActionListener(e -> {
             if (meet.isSelected()) {
                 dead.setSelected(false);
@@ -128,6 +134,7 @@ public class AddEventModal extends JDialog {
         deadLabel.setVisible(true);
         deadLabel.setText("Deadline");
         this.add(deadLabel);
+        //If meeting is selected, make meeting unselected and deadline selected.
         dead.addActionListener(e -> {
             if (dead.isSelected()) {
                 meet.setSelected(false);

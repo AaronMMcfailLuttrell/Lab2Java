@@ -47,6 +47,7 @@ public class EventListPanel extends JPanel {
         displayPanel.setVisible(true);
         displayPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
+        //Itemholder is the scrollbar for displayPanel
         itemHolder.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         itemHolder.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         itemHolder.setSize(Constants.DISPLAY_PANEL_X, Constants.DISPLAY_PANEL_Y);
@@ -61,6 +62,8 @@ public class EventListPanel extends JPanel {
         sortDropDown.setBorder(BorderFactory.createLineBorder(Color.black));
         sortDropDown.setVisible(true);
 
+
+        //Button declarations for sortDropDown
         JButton blankButton = new JButton();
         blankButton.setText("No Sort");
         blankButton.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -212,27 +215,13 @@ public class EventListPanel extends JPanel {
 
     public void redrawDisplay() {
         displayPanel.removeAll();
-        /*
-        for (Event event : events) {
-            displayPanel.add(new EventPanel(event, DISPLAY_PANEL_X, DISPLAY_PANEL_Y));
-            displayPanel.add(Box.createVerticalStrut(5));
-        }
-
-        */
 
         if (checkBoxShowComplete) {
 
         }
 
         if (checkBoxShowMeetings) {
-            /*
-            for (Event event : events) {
-                if ((event instanceof Meeting) {
-                    displayPanel.add(new EventPanel(event, DISPLAY_PANEL_X, DISPLAY_PANEL_Y));
-                    displayPanel.add(Box.createVerticalStrut(5));
-                }
-            }
-            */
+
             if (checkBoxShowComplete) {
                 for (Event event : events) {
                     if ((event instanceof Meeting)) {

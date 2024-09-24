@@ -15,11 +15,8 @@ public class EventPlanner {
         frame.add(eventListPanel);
 
         //Create default events
-
-
-
-
         addDefaultEvents(eventListPanel);
+
         frame.repaint();
         frame.revalidate();
     }

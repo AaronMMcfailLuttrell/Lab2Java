@@ -47,7 +47,14 @@ public class EventPanel extends JPanel {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
         Runnable task = () -> {
-            Duration howFar = Duration.between(LocalDateTime.now(), this.event.getDateTime());
+            Duration howFar;
+            if (event instanceof Meeting) {
+                howFar = Duration.between(LocalDateTime.now(), ((Meeting)this.event).getEndDateTime());
+            } else {
+                howFar = Duration.between(LocalDateTime.now(), this.event.getDateTime());
+            }
+
+
             if (howFar.toDaysPart() <= 0 && howFar.toHoursPart() <= 0 && howFar.toMinutesPart() <= 0 && howFar.toSecondsPart() <= 0) {
                 this.setBackground(Color.RED);
             } else if (howFar.toDaysPart() < 1) {
@@ -55,7 +62,6 @@ public class EventPanel extends JPanel {
             } else if (howFar.toDaysPart() >= 1) {
                 this.setBackground(Color.GREEN);
             }
-            System.out.println(howFar.toDaysPart() + "\t" + howFar.toHoursPart() + "\t" + howFar.toMinutesPart() + "\t" + howFar.toMinutesPart() + "\t" + howFar.toSecondsPart());
         };
 
         scheduler.scheduleAtFixedRate(task, 0, 1, TimeUnit.SECONDS);
