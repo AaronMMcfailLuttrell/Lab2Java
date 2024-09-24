@@ -6,17 +6,11 @@ import java.util.Comparator;
 
 public class EventListPanel extends JPanel {
 
-    final int CHECK_DIMENSION = 20;
-    final int CONTROL_PANEL_X = 600;
-    final int CONTROL_PANEL_Y = 200;
-    final int DISPLAY_PANEL_X = 1000;
-    final int DISPLAY_PANEL_Y = 700;
-
     boolean checkBoxShowComplete = false;
     boolean checkBoxShowMeetings = false;
     boolean checkBoxShowDeadlines = false;
 
-    ArrayList<Event> events = new ArrayList<>();
+    private ArrayList<Event> events = new ArrayList<>();
     EventListPanel(ArrayList<Event> events) {
         this.events = events;
     }
@@ -38,32 +32,32 @@ public class EventListPanel extends JPanel {
         this.setBackground(Color.gray);
         this.setVisible(true);
         //controlPanel Config
-        controlPanel.setSize(CONTROL_PANEL_X,CONTROL_PANEL_Y);
+        controlPanel.setSize(Constants.CONTROL_PANEL_X,Constants.CONTROL_PANEL_Y);
         controlPanel.setLayout(null);
         controlPanel.setBackground(Color.white);
         controlPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         controlPanel.setVisible(true);
-        controlPanel.setLocation(300, 750);
+        controlPanel.setLocation(Constants.CONTROL_PANEL_LOC_X, Constants.CONTROL_PANEL_LOC_Y);
         this.add(controlPanel);
         //DisplayPanel Config
-        displayPanel.setSize(DISPLAY_PANEL_X,DISPLAY_PANEL_Y);
+        displayPanel.setSize(Constants.DISPLAY_PANEL_X,Constants.DISPLAY_PANEL_Y);
         displayPanel.setBackground(Color.white);
-        displayPanel.setLocation(100,0);
+        displayPanel.setLocation(Constants.DISPLAY_PANEL_LOC_X,Constants.DISPLAY_PANEL_LOC_Y);
         displayPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         displayPanel.setVisible(true);
         displayPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
         itemHolder.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         itemHolder.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        itemHolder.setSize(DISPLAY_PANEL_X,DISPLAY_PANEL_Y);
+        itemHolder.setSize(Constants.DISPLAY_PANEL_X, Constants.DISPLAY_PANEL_Y);
         itemHolder.setBackground(Color.white);
         itemHolder.setBorder(BorderFactory.createLineBorder(Color.black));
 
         //dropdown
         sortDropDown.setBackground(Color.white);
         sortDropDown.setLayout(null);
-        sortDropDown.setSize(200,30);
-        sortDropDown.setLocation(390,100);
+        sortDropDown.setSize(Constants.DROP_DOWN_SIZE_X,Constants.DROP_DOWN_SIZE_Y);
+        sortDropDown.setLocation(Constants.DROP_DOWN_LOC_X,Constants.DROP_DOWN_LOC_Y);
         sortDropDown.setBorder(BorderFactory.createLineBorder(Color.black));
         sortDropDown.setVisible(true);
 
@@ -153,17 +147,22 @@ public class EventListPanel extends JPanel {
             filterDisplay[i].setBorder(BorderFactory.createLineBorder(Color.black));
             filterDisplay[i].setBackground(Color.white);
             filterDisplay[i].setLayout(null);
-            filterDisplay[i].setSize(CHECK_DIMENSION,CHECK_DIMENSION);
+            filterDisplay[i].setSelected(true);
+            filterDisplay[i].setSize(Constants.CHECK_DIMENSION,Constants.CHECK_DIMENSION);
             filterDisplay[i].setVisible(true);
             filterText[i] = new JTextField();
             filterText[i].setLocation(40,10+40*i);
             filterText[i].setText(filterTextString[i]);
-            filterText[i].setSize(200,CHECK_DIMENSION);
+            filterText[i].setSize(200, Constants.CHECK_DIMENSION);
             filterText[i].setEditable(false);
             filterText[i].setVisible(true);
             controlPanel.add(filterText[i]);
             controlPanel.add(filterDisplay[i]);
         }
+
+        checkBoxShowComplete = true;
+        checkBoxShowMeetings = true;
+        checkBoxShowDeadlines = true;
 
         /*
         Commands for each filter button
@@ -196,16 +195,18 @@ public class EventListPanel extends JPanel {
 
         addEventButton.setText("Add Event"); //addEventModal
         addEventButton.addActionListener(e -> {AddEventModal eventMod = new AddEventModal(this);});
-        addEventButton.setLocation(390,10);
+        addEventButton.setLocation(Constants.ADD_EVENT_BUTTON_LOC_X,Constants.ADD_EVENT_BUTTON_LOC_Y);
         addEventButton.setBorder(BorderFactory.createLineBorder(Color.black));
         addEventButton.setBackground(Color.white);
         addEventButton.setLayout(null);
-        addEventButton.setSize(200,20);
+        addEventButton.setSize(Constants.ADD_EVENT_BUTTON_SIZE_X,Constants.ADD_EVENT_BUTTON_SIZE_Y);
         controlPanel.add(addEventButton);
 
         this.add(itemHolder);
-        itemHolder.setPreferredSize(new Dimension(DISPLAY_PANEL_X, DISPLAY_PANEL_Y));
-        displayPanel.setPreferredSize(new Dimension(DISPLAY_PANEL_X,DISPLAY_PANEL_Y));
+        itemHolder.setPreferredSize(new Dimension(Constants.DISPLAY_PANEL_X, Constants.DISPLAY_PANEL_Y));
+        displayPanel.setPreferredSize(new Dimension(Constants.DISPLAY_PANEL_X,Constants.DISPLAY_PANEL_Y));
+
+
 
     }
 
@@ -235,14 +236,14 @@ public class EventListPanel extends JPanel {
             if (checkBoxShowComplete) {
                 for (Event event : events) {
                     if ((event instanceof Meeting)) {
-                        displayPanel.add(new EventPanel(event, DISPLAY_PANEL_X, DISPLAY_PANEL_Y, this));
+                        displayPanel.add(new EventPanel(event));
                         displayPanel.add(Box.createVerticalStrut(5));
                     }
                 }
             } else if (!checkBoxShowComplete) {
                 for (Event event : events) {
                     if ((event instanceof Meeting) && (!(((Meeting) event).isComplete()))) {
-                        displayPanel.add(new EventPanel(event, DISPLAY_PANEL_X, DISPLAY_PANEL_Y, this));
+                        displayPanel.add(new EventPanel(event));
                         displayPanel.add(Box.createVerticalStrut(5));
                     }
                 }
@@ -254,24 +255,31 @@ public class EventListPanel extends JPanel {
             if (checkBoxShowComplete) {
                 for (Event event : events) {
                     if ((event instanceof Deadline)) {
-                        displayPanel.add(new EventPanel(event, DISPLAY_PANEL_X, DISPLAY_PANEL_Y, this));
+                        displayPanel.add(new EventPanel(event));
                         displayPanel.add(Box.createVerticalStrut(5));
+
                     }
                 }
             } else if (!checkBoxShowComplete) {
                 for (Event event : events) {
                     if ((event instanceof Deadline) && (!(((Deadline) event).isComplete()))) {
-                        displayPanel.add(new EventPanel(event, DISPLAY_PANEL_X, DISPLAY_PANEL_Y, this));
+                        displayPanel.add(new EventPanel(event));
                         displayPanel.add(Box.createVerticalStrut(5));
+
                     }
                 }
             }
         }
 
-        displayPanel.setPreferredSize(new Dimension(DISPLAY_PANEL_X, displayPanel.getComponentCount() * 200));
+        displayPanel.setPreferredSize(new Dimension(Constants.DISPLAY_PANEL_X, displayPanel.getComponentCount() * 200));
         displayPanel.revalidate();
         displayPanel.repaint();
         itemHolder.revalidate();
         itemHolder.repaint();
     }
+
+    public void addEvent(Event event) {
+        events.add(event);
+    }
+
 }

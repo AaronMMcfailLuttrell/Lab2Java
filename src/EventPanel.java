@@ -1,15 +1,18 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class EventPanel extends JPanel {
-    final int SUBMIT_WIDTH = 100;
-    final int SUBMIT_HEIGHT = 30;
     Event event;
     JButton completeButton = new JButton("Complete");
-    EventPanel(Event event, int panelWidth, int panelHeight, EventListPanel eventListPanel) {
+    EventPanel(Event event/*, EventListPanel eventListPanel*/) {
         this.event = event;
-        this.setPreferredSize(new Dimension(panelWidth-40, 200));
+        this.setPreferredSize(new Dimension(Constants.DISPLAY_PANEL_X-40, 200));
         this.setBackground(Color.WHITE);
         this.setLayout(null);
         this.setVisible(true);
@@ -17,33 +20,49 @@ public class EventPanel extends JPanel {
         JTextArea textArea = new JTextArea();
         textArea.setEditable(false);
         textArea.setText(event.getDisplayString());
-        textArea.setSize(panelWidth-60, 50);
-        textArea.setPreferredSize(new Dimension(panelWidth-60, 50));
+        textArea.setSize(Constants.DISPLAY_PANEL_X-60, 50);
+        textArea.setPreferredSize(new Dimension(Constants.DISPLAY_PANEL_X-60, 50));
         textArea.setFont(new Font("Arial", Font.PLAIN, 16));
         textArea.setLocation(10,10);
         textArea.setVisible(true);
         completeButton.setText("Complete");
-        completeButton.setSize(SUBMIT_WIDTH, SUBMIT_HEIGHT);
+        completeButton.setSize(Constants.SUBMIT_WIDTH, Constants.SUBMIT_HEIGHT);
         completeButton.setLocation(0, 150);
         completeButton.addActionListener(e -> {
-           if (event instanceof Meeting) {
-               ((Meeting) event).complete();
-           } else if (event instanceof Deadline) {
-               ((Deadline) event).complete();
+           if (event instanceof Completable) {
+               ((Completable) event).complete();
            }
-           eventListPanel.redrawDisplay();
+           //eventListPanel.redrawDisplay();
         });
         completeButton.setBackground(Color.WHITE);
         completeButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         completeButton.setVisible(true);
+        updateUrgency();
         this.add(textArea);
         this.add(completeButton);
 
     }
 
     void updateUrgency() {
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
+        Runnable task = () -> {
+            Duration howFar = Duration.between(LocalDateTime.now(), this.event.getDateTime());
+            if (howFar.toDaysPart() <= 0 && howFar.toHoursPart() <= 0 && howFar.toMinutesPart() <= 0 && howFar.toSecondsPart() <= 0) {
+                this.setBackground(Color.RED);
+            } else if (howFar.toDaysPart() < 1) {
+                this.setBackground(Color.YELLOW);
+            } else if (howFar.toDaysPart() >= 1) {
+                this.setBackground(Color.GREEN);
+            }
+            System.out.println(howFar.toDaysPart() + "\t" + howFar.toHoursPart() + "\t" + howFar.toMinutesPart() + "\t" + howFar.toMinutesPart() + "\t" + howFar.toSecondsPart());
+        };
+
+        scheduler.scheduleAtFixedRate(task, 0, 1, TimeUnit.SECONDS);
     }
 
+    public Event getEvent() {
+        return event;
+    }
 
 }
